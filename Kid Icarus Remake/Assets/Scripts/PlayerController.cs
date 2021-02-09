@@ -6,7 +6,6 @@ public class PlayerController : MonoBehaviour
 {
     public float speed;
     public float jumpForce;
-    public GameObject arrowPrefab;
     private float moveInput;
     private bool facingRight = true;
 
