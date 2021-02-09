@@ -7,6 +7,7 @@ public class PlayerController : MonoBehaviour
     public float speed;
     public float jumpForce;
     private float moveInput;
+    private bool facingRight = true;
 
     private Rigidbody2D rb;
 
@@ -35,6 +36,23 @@ public class PlayerController : MonoBehaviour
 
         moveInput = Input.GetAxis("Horizontal");
         rb.velocity = new Vector2(moveInput * speed, rb.velocity.y);
+
+        if(facingRight == false && moveInput > 0)
+        {
+            Flip();
+        }
+        else if(facingRight == true && moveInput < 0)
+        {
+            Flip();
+        }
+    }
+
+    void Flip()
+    {
+        facingRight = !facingRight;
+        Vector3 Scaler = transform.localScale;
+        Scaler.x *= -1;
+        transform.localScale = Scaler;
     }
 
     void Update()
