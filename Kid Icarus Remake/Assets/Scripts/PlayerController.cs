@@ -18,9 +18,12 @@ public class PlayerController : MonoBehaviour
     private int extraJumps;
     public int extraJumpsValue;
 
+    private Animator anim;
+
     // Start is called before the first frame update
     void Start()
     {
+        anim = GetComponent<Animator>();
         extraJumps = extraJumpsValue;
         rb = GetComponent<Rigidbody2D>();
     }
@@ -43,12 +46,22 @@ public class PlayerController : MonoBehaviour
 
         if (Input.GetKeyDown(KeyCode.UpArrow) && extraJumps > 0)
         {
+            anim.SetTrigger("takeOff");
             rb.velocity = Vector2.up * jumpForce;
             extraJumps--;
         }
         else if (Input.GetKeyDown(KeyCode.UpArrow) && extraJumps == 0 && isGrounded == true)
         {
             rb.velocity = Vector2.up * jumpForce;
+        }
+
+        if (moveInput == 0)
+        {
+            anim.SetBool("isRunning", false);
+        }
+        else
+        {
+            anim.SetBool("isRunning", true);
         }
     }
 }
