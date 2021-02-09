@@ -5,6 +5,7 @@ using UnityEngine;
 public class TankEnemy : MonoBehaviour
 {
     public float walkSpeed;
+    public int health = 200;
 
     [HideInInspector]
     public bool mustPatrol;
@@ -19,6 +20,16 @@ public class TankEnemy : MonoBehaviour
     void Start()
     {
         mustPatrol = true;
+    }
+
+    public void TakeDamage (int damage)
+    {
+        health -= damage;
+
+        if (health <= 0)
+        {
+            Die();
+        }
     }
 
     // Update is called once per frame
@@ -36,6 +47,11 @@ public class TankEnemy : MonoBehaviour
         {
             mustTurn = !Physics2D.OverlapCircle(groundCheckPos.position, 0.1f, groundLayer);
         }
+    }
+
+    void Die()
+    {
+        Destroy(gameObject);
     }
 
     void Patrol()
