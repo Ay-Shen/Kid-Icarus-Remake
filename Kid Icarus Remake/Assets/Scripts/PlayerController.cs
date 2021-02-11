@@ -1,9 +1,11 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class PlayerController : MonoBehaviour
 {
+    public Text livesText;
     public float speed;
     public float jumpForce;
     private float moveInput;
@@ -11,11 +13,22 @@ public class PlayerController : MonoBehaviour
 
     private Rigidbody2D rb;
 
+    private bool touchingEnemy;
+    public Transform enemyCheck;
+    public LayerMask whatIsEnemy;
+    public float checkHurtRadius;
     private bool isGrounded;
     public Transform groundCheck;
     public float checkRadius;
     public LayerMask whatIsGround;
 
+    public float timeHurt = 0.1f;
+    bool isHurt;
+    float hurtTimer;
+    public float timeInvincible = 2.0f;
+    bool isInvincible;
+    float invincibleTimer;
+    private int livesValue = 3;
     private int extraJumps;
     public int extraJumpsValue;
 
@@ -27,6 +40,7 @@ public class PlayerController : MonoBehaviour
         anim = GetComponent<Animator>();
         extraJumps = extraJumpsValue;
         rb = GetComponent<Rigidbody2D>();
+        livesText.text = "Lives: " + livesValue.ToString();
     }
 
     // Update is called once per frame
@@ -45,6 +59,8 @@ public class PlayerController : MonoBehaviour
         {
             Flip();
         }
+
+        touchingEnemy = Physics2D.OverlapCircle(enemyCheck.position, checkHurtRadius, whatIsEnemy);
     }
 
     void Flip()
@@ -56,6 +72,31 @@ public class PlayerController : MonoBehaviour
 
     void Update()
     {
+        if (touchingEnemy == true)
+        {
+            if (isInvincible)
+                return;
+            isHurt = true;
+            isInvincible = true;
+            invincibleTimer = timeInvincible;
+        }
+
+        if (isHurt)
+        {
+            livesValue -= 1;
+            livesText.text = "Lives: " + livesValue.ToString();
+            hurtTimer -= Time.deltaTime;
+            if (hurtTimer < 0)
+                isHurt = false;
+        }
+
+        if (isInvincible)
+        {
+            invincibleTimer -= Time.deltaTime;
+            if (invincibleTimer < 0)
+                isInvincible = false;
+        }
+
         if (isGrounded == true)
         {
             extraJumps = extraJumpsValue;

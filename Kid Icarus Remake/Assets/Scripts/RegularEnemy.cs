@@ -41,11 +41,6 @@ public class RegularEnemy : MonoBehaviour
         }
     }
 
-    private void FixedUpdate()
-    {
-        
-    }
-
     void Die()
     {
         Destroy(gameObject);
