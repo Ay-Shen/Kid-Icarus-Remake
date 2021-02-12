@@ -58,7 +58,15 @@ public class PlayerController : MonoBehaviour
         isGrounded = Physics2D.OverlapCircle(groundCheck.position, checkRadius, whatIsGround);
 
         moveInput = Input.GetAxis("Horizontal");
-        rb.velocity = new Vector2(moveInput * speed, rb.velocity.y);
+
+        if (gameOver == false)
+        {
+            rb.velocity = new Vector2(moveInput * speed, rb.velocity.y);
+        }
+        else if (gameOver == true)
+        {
+            rb.velocity = new Vector2(moveInput * 0, rb.velocity.y);
+        }
 
         if (facingRight == false && moveInput > 0)
         {

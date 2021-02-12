@@ -1089,6 +1089,7 @@ MonoBehaviour:
     serializedVersion: 2
     m_Bits: 256
   bodyCollider: {fileID: 594202249}
+  deathParticle: {fileID: 5200573338261468661, guid: b87a820cefc1cd149b0fe078eb24f466, type: 3}
 --- !u!23 &594202245
 MeshRenderer:
   m_ObjectHideFlags: 0
@@ -1356,6 +1357,7 @@ MonoBehaviour:
   bodyCollider: {fileID: 681661696}
   airSpeed: 4
   lineOfSight: 4
+  deathParticle: {fileID: 5200573338261468661, guid: b87a820cefc1cd149b0fe078eb24f466, type: 3}
 --- !u!23 &681661700
 MeshRenderer:
   m_ObjectHideFlags: 0
@@ -2255,6 +2257,7 @@ MonoBehaviour:
   bodyCollider: {fileID: 1567554224}
   airSpeed: 0
   lineOfSight: 0
+  deathParticle: {fileID: 5200573338261468661, guid: b87a820cefc1cd149b0fe078eb24f466, type: 3}
 --- !u!23 &1567554228
 MeshRenderer:
   m_ObjectHideFlags: 0

@@ -20,6 +20,7 @@ public class RegularEnemy : MonoBehaviour
     public float airSpeed;
     public float lineOfSight;
     private Transform player;
+    public ParticleSystem deathParticle;
 
     // Start is called before the first frame update
     void Start()
@@ -35,6 +36,7 @@ public class RegularEnemy : MonoBehaviour
         if (health <= 0)
         {
             Instantiate(healthPrefab, healthDrop.position, healthDrop.rotation);
+            Instantiate(deathParticle, healthDrop.position, healthDrop.rotation);
             Die();
         }
     }

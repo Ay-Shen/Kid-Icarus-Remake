@@ -17,6 +17,7 @@ public class TankEnemy : MonoBehaviour
     public Transform groundCheckPos;
     public LayerMask groundLayer;
     public Collider2D bodyCollider;
+    public ParticleSystem deathParticle;
 
     // Start is called before the first frame update
     void Start()
@@ -31,6 +32,7 @@ public class TankEnemy : MonoBehaviour
         if (health <= 0)
         {
             Instantiate(healthPrefab, healthDrop.position, healthDrop.rotation);
+            Instantiate(deathParticle, healthDrop.position, healthDrop.rotation);
             Die();
         }
     }
