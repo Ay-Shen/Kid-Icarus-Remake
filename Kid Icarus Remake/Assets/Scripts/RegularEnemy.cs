@@ -6,7 +6,9 @@ public class RegularEnemy : MonoBehaviour
 {
     public float walkSpeed;
     public int health = 10;
-
+    public Transform healthDrop;
+    public GameObject healthPrefab;
+    
     [HideInInspector]
     public bool mustPatrol;
     private bool mustTurn;
@@ -28,6 +30,7 @@ public class RegularEnemy : MonoBehaviour
 
         if (health <= 0)
         {
+            Instantiate(healthPrefab, healthDrop.position, healthDrop.rotation);
             Die();
         }
     }

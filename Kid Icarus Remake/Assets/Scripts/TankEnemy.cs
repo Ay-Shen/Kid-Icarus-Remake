@@ -6,6 +6,8 @@ public class TankEnemy : MonoBehaviour
 {
     public float walkSpeed;
     public int health = 200;
+    public Transform healthDrop;
+    public GameObject healthPrefab;
 
     [HideInInspector]
     public bool mustPatrol;
@@ -28,6 +30,7 @@ public class TankEnemy : MonoBehaviour
 
         if (health <= 0)
         {
+            Instantiate(healthPrefab, healthDrop.position, healthDrop.rotation);
             Die();
         }
     }

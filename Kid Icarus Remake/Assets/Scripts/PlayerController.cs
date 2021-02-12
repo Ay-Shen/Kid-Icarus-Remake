@@ -122,4 +122,14 @@ public class PlayerController : MonoBehaviour
             anim.SetBool("isRunning", true);
         }
     }
+
+    private void OnCollisionEnter2D(Collision2D collision)
+    {
+        if (collision.collider.tag == "Pickup")
+        {
+            livesValue += 1;
+            livesText.text = "Lives: " + livesValue.ToString();
+            Destroy(collision.collider.gameObject);
+        }
+    }
 }
