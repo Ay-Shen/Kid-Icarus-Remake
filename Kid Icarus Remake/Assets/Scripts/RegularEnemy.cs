@@ -8,7 +8,7 @@ public class RegularEnemy : MonoBehaviour
     public int health = 10;
     public Transform healthDrop;
     public GameObject healthPrefab;
-    
+
     [HideInInspector]
     public bool mustPatrol;
     private bool mustTurn;
@@ -17,11 +17,15 @@ public class RegularEnemy : MonoBehaviour
     public Transform groundCheckPos;
     public LayerMask groundLayer;
     public Collider2D bodyCollider;
+    public float airSpeed;
+    public float lineOfSight;
+    private Transform player;
 
     // Start is called before the first frame update
     void Start()
     {
         mustPatrol = true;
+        player = GameObject.FindGameObjectWithTag("Player").transform;
     }
 
     public void TakeDamage(int damage)
@@ -41,6 +45,11 @@ public class RegularEnemy : MonoBehaviour
         if (mustPatrol)
         {
             Patrol();
+        }
+        float distanceFromPlayer = Vector2.Distance(player.position, transform.position);
+        if (distanceFromPlayer < lineOfSight)
+        {
+            transform.position = Vector2.MoveTowards(this.transform.position, player.position, airSpeed * Time.deltaTime);
         }
     }
 
@@ -66,4 +75,10 @@ public class RegularEnemy : MonoBehaviour
         walkSpeed *= -1;
         mustPatrol = true;
     }
+    private void OnDrawGizmosSelected()
+    {
+        Gizmos.color = Color.green;
+        Gizmos.DrawWireSphere(transform.position, lineOfSight);
+    }
+
 }

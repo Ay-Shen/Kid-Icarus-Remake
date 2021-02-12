@@ -6,6 +6,7 @@ TagManager:
   tags:
   - Enemy
   - Pickup
+  - Win area
   layers:
   - Default
   - TransparentFX
@@ -20,7 +21,7 @@ TagManager:
   - Enemy
   - Pickup
   - Arrow
-  - 
+  - Flying Enemy
   - 
   - 
   - 

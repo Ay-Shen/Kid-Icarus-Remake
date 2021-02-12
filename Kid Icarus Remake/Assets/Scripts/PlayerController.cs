@@ -2,12 +2,15 @@
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
+using UnityEngine.SceneManagement;
 
 public class PlayerController : MonoBehaviour
 {
     public Text livesText;
     public float speed;
     public float jumpForce;
+    public float freezeSpeed;
+    public Text winText;
     private float moveInput;
     private bool facingRight = true;
 
@@ -16,11 +19,15 @@ public class PlayerController : MonoBehaviour
     private bool touchingEnemy;
     public Transform enemyCheck;
     public LayerMask whatIsEnemy;
+    private bool touchingFlyingEnemy;
+    public Transform flyingEnemyCheck;
+    public LayerMask whatIsFlyingEnemy;
     public float checkHurtRadius;
     private bool isGrounded;
     public Transform groundCheck;
     public float checkRadius;
     public LayerMask whatIsGround;
+    public bool canMove;
 
     public float timeHurt = 0.1f;
     bool isHurt;
@@ -31,12 +38,14 @@ public class PlayerController : MonoBehaviour
     private int livesValue = 3;
     private int extraJumps;
     public int extraJumpsValue;
+    public bool gameOver = false;
 
     private Animator anim;
 
     // Start is called before the first frame update
     void Start()
     {
+        canMove = true;
         anim = GetComponent<Animator>();
         extraJumps = extraJumpsValue;
         rb = GetComponent<Rigidbody2D>();
@@ -61,6 +70,12 @@ public class PlayerController : MonoBehaviour
         }
 
         touchingEnemy = Physics2D.OverlapCircle(enemyCheck.position, checkHurtRadius, whatIsEnemy);
+        touchingFlyingEnemy = Physics2D.OverlapCircle(flyingEnemyCheck.position, checkHurtRadius, whatIsFlyingEnemy);
+
+        if (Input.GetKey("escape"))
+        {
+            Application.Quit();
+        }
     }
 
     void Flip()
@@ -72,7 +87,24 @@ public class PlayerController : MonoBehaviour
 
     void Update()
     {
+        if (Input.GetKey(KeyCode.R))
+        {
+            if (gameOver == true)
+            {
+                Pause();
+                SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
+            }
+        }
+
         if (touchingEnemy == true)
+        {
+            if (isInvincible)
+                return;
+            isHurt = true;
+            isInvincible = true;
+            invincibleTimer = timeInvincible;
+        }
+        if (touchingFlyingEnemy == true)
         {
             if (isInvincible)
                 return;
@@ -88,6 +120,13 @@ public class PlayerController : MonoBehaviour
             hurtTimer -= Time.deltaTime;
             if (hurtTimer < 0)
                 isHurt = false;
+            if (livesValue <= 0)
+            {
+                anim.SetTrigger("isDying");
+                gameOver = true;
+                //This is the text for the lose screen
+                winText.text = "You lose!";
+            }
         }
 
         if (isInvincible)
@@ -130,6 +169,16 @@ public class PlayerController : MonoBehaviour
             livesValue += 1;
             livesText.text = "Lives: " + livesValue.ToString();
             Destroy(collision.collider.gameObject);
+        }
+    }
+
+    public void OnTriggerEnter2D(Collider2D other)
+    {
+        if (other.gameObject.tag == "Win area")
+        {
+            gameOver = true;
+            //This is the text for the win screen
+            winText.text = "You Win!";
         }
     }
 }
