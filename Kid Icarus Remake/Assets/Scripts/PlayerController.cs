@@ -91,7 +91,6 @@ public class PlayerController : MonoBehaviour
         {
             if (gameOver == true)
             {
-                Pause();
                 SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
             }
         }
