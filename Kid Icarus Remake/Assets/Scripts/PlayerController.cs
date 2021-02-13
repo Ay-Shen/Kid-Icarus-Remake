@@ -27,7 +27,9 @@ public class PlayerController : MonoBehaviour
     public Transform groundCheck;
     public float checkRadius;
     public LayerMask whatIsGround;
-    public bool canMove;
+
+    public Transform firePoint;
+    public GameObject arrowPrefab;
 
     public float timeHurt = 0.1f;
     bool isHurt;
@@ -41,15 +43,23 @@ public class PlayerController : MonoBehaviour
     public bool gameOver = false;
 
     private Animator anim;
+    public AudioSource musicSource;
+    public AudioClip mainMusic;
+    public AudioClip winMusic;
+    public AudioClip loseMusic;
+    public AudioClip shootArrow;
+    public AudioClip takeDamage;
 
     // Start is called before the first frame update
     void Start()
     {
-        canMove = true;
         anim = GetComponent<Animator>();
         extraJumps = extraJumpsValue;
         rb = GetComponent<Rigidbody2D>();
         livesText.text = "Lives: " + livesValue.ToString();
+        musicSource.clip = mainMusic;
+        musicSource.Play();
+        musicSource.loop = true;
     }
 
     // Update is called once per frame
@@ -65,6 +75,9 @@ public class PlayerController : MonoBehaviour
         }
         else if (gameOver == true)
         {
+            GameObject[] enemies = GameObject.FindGameObjectsWithTag("Enemy");
+            foreach (GameObject enemy in enemies)
+                GameObject.Destroy(enemy);
             rb.velocity = new Vector2(moveInput * 0, rb.velocity.y);
         }
 
@@ -95,6 +108,12 @@ public class PlayerController : MonoBehaviour
 
     void Update()
     {
+        if (Input.GetButtonDown("Fire1"))
+        {
+            PlaySound(shootArrow);
+            Shoot();
+        }
+
         if (Input.GetKey(KeyCode.R))
         {
             if (gameOver == true)
@@ -122,6 +141,8 @@ public class PlayerController : MonoBehaviour
 
         if (isHurt)
         {
+            anim.SetTrigger("takeDamage");
+            PlaySound(takeDamage);
             livesValue -= 1;
             livesText.text = "Lives: " + livesValue.ToString();
             hurtTimer -= Time.deltaTime;
@@ -130,6 +151,9 @@ public class PlayerController : MonoBehaviour
             if (livesValue <= 0)
             {
                 anim.SetTrigger("isDying");
+                musicSource.clip = loseMusic;
+                musicSource.Play();
+                musicSource.loop = true;
                 gameOver = true;
                 //This is the text for the lose screen
                 winText.text = "You lose!";
@@ -184,8 +208,21 @@ public class PlayerController : MonoBehaviour
         if (other.gameObject.tag == "Win area")
         {
             gameOver = true;
+            musicSource.clip = winMusic;
+            musicSource.Play();
+            musicSource.loop = true;
             //This is the text for the win screen
             winText.text = "You Win!";
         }
+    }
+
+    void Shoot()
+    {
+        Instantiate(arrowPrefab, firePoint.position, firePoint.rotation);
+    }
+
+    public void PlaySound(AudioClip clip)
+    {
+        musicSource.PlayOneShot(clip);
     }
 }
